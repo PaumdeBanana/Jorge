@@ -4,11 +4,11 @@
 #include <MFRC522.h>
 #include <BluetoothSerial.h>
 
-#define fabio "E6 D5 FD 93"
-#define gira "13 5A 43 10"
-#define belle "31 5C 04 1F"
-#define ester "A3 69 AE 1B"
-#define tagbluetooth "63 53 AA A5"
+#define tagMu "E6 D5 FD 93"
+#define tagGirar "13 5A 43 10"
+#define tagMuv "31 5C 04 1F"
+#define tagNrf "A3 69 AE 1B"
+#define tagBluetooth "63 53 AA A5"
 
 #define btnome "Jorge"
 
@@ -99,19 +99,19 @@ void loop() {
   conteudo = "";
   rfid();
   Serial.println(conteudo);
-  if (conteudo.substring(1) == fabio) {
+  if (conteudo.substring(1) == tagMu) {
     mu();
   }
-  if (conteudo.substring(1) == gira) {
+  if (conteudo.substring(1) == tagGirar) {
     girar();
   }
-  if (conteudo.substring(1) == belle) {
+  if (conteudo.substring(1) == tagMuv) {
     muv();
   }
-  if (conteudo.substring(1) == ester) {
+  if (conteudo.substring(1) == tagNrf) {
     nrf();
   }
-  if (conteudo.substring(1) == tagbluetooth) {
+  if (conteudo.substring(1) == tagBluetooth) {
     bluetooth();
   }
 }
@@ -161,7 +161,7 @@ void mu() {
   while (true) {
     conteudo = "";
     rfid();
-    if (conteudo.substring(1) == fabio) {
+    if (conteudo.substring(1) == tagMu) {
       reset();
       return;
     }
@@ -184,7 +184,7 @@ void girar() {
   while (true) {
     conteudo = "";
     rfid();
-    if (conteudo.substring(1) == gira) {
+    if (conteudo.substring(1) == tagGirar) {
       reset();
       return;
     }
@@ -216,19 +216,19 @@ void muv() {
     delay(250);
     conteudo = "";
     rfid();
-    if (conteudo.substring(1) == belle) {
+    if (conteudo.substring(1) == tagMuv) {
       reset();
       return;
     }
     delay(250);
   }
-  if (conteudo.substring(1) == belle) {
+  if (conteudo.substring(1) == tagMuv) {
     reset();
     return;
   }
   for (int d = 0; d < 12; d++) {
     delay(250);
-    if (conteudo.substring(1) == belle) {
+    if (conteudo.substring(1) == tagMuv) {
       reset();
       return;
     }
@@ -321,10 +321,10 @@ void nrf() {
       speed4 = 0;
     }
 
-    ledcWrite(1, speed1 * data.pot2 / 255);
-    ledcWrite(2, speed2 * data.pot1 / 255);
-    ledcWrite(3, speed3 * data.pot1 / 255);
-    ledcWrite(4, speed4 * data.pot2 / 255);
+    ledcWrite(1, speed1 * data.pot1 / 255);
+    ledcWrite(2, speed2 * data.pot2 / 255);
+    ledcWrite(3, speed3 * data.pot2 / 255);
+    ledcWrite(4, speed4 * data.pot1 / 255);
 
     if (data.button1 == 0) {
       SPI.end();
@@ -359,7 +359,7 @@ void bluetooth() {
       }
       conteudo = "";
       rfid();
-      if (conteudo.substring(1) == tagbluetooth) {
+      if (conteudo.substring(1) == tagBluetooth) {
         BT.disconnect();
         BT.end();
         reset();
@@ -491,14 +491,14 @@ void bluetooth() {
         digitalWrite(buzzer, LOW);
       }
 
-      conteudo = "";
-      rfid();
-      if (conteudo.substring(1) == tagbluetooth) {
+      else if (btdata == 'X' || btdata == 'x') {
         BT.disconnect();
         BT.end();
         reset();
         return;
       }
+
+      delay(20);
     }
   }
 }
